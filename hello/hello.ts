@@ -1,4 +1,8 @@
 import { api } from "encore.dev/api";
+import {
+    AdminGetApiKeysParams,
+    AdminApiKeyResponse,
+} from "@etohq/types";
 
 // Welcome to Encore!
 // This is a simple "Hello World" project to get you started.
@@ -13,16 +17,29 @@ import { api } from "encore.dev/api";
 //	curl http://localhost:4000/hello/World
 //
 export const get = api(
-  { expose: true, method: "GET", path: "/hello/:name" },
-  async ({ name }: { name: string }): Promise<Response> => {
-    const msg = `Hello ${name}!`;
-    return { message: msg };
-  }
+    { expose: true, method: "GET", path: "/hello/:name" },
+    async (params: AdminGetApiKeysParams): Promise<AdminApiKeyResponse> => {
+        const msg = `Hello ${JSON.stringify(params)}!`;
+        return {
+            api_key: {
+                id: msg,
+                token: "sample_token",
+                redacted: "sample_redacted",
+                title: "sample_title",
+                type: 'secret',
+                last_used_at: new Date(),
+                created_by: "sample_created_by",
+                created_at: new Date(),
+                updated_at: new Date(),
+                revoked_by: null,
+                revoked_at: null,
+                deleted_at: null,
+            },
+        };
+    }
 );
 
-interface Response {
-  message: string;
-}
+
 
 // ==================================================================
 
